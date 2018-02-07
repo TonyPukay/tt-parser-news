@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ParsingController@viewWelcome');
+
+Route::get('/parsing', 'ParsingController@viewParsing');
+
+Route::get('/history', 'ParsingController@viewHistory');
