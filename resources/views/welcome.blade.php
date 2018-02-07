@@ -1,95 +1,252 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('pattern.main')
+@section('content')
 
-        <title>Laravel</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+    <style>
+        body{
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            color:#fff;
+            padding:10px;
+            font:14px/1.3 'Segoe UI',Arial, sans-serif;
+        }
+        #container{
+            color: #555;
+            font-size: 58px;
+            margin: 0 auto;
+            padding: 200px 0 100px;
+            width: 650px;
+            position:relative;
+            min-height: 90px;
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+            font-family:'Open Sans Condensed',sans-serif;
+            text-shadow:1px 1px 0 rgba(255,255,255,0.5);
+        }
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
+        #container:before{
+            content: ">";
+            font-size: 50px;
+            left: -40px;
+            opacity: 0.25;
+            position: absolute;
+            text-shadow: 1px 1px 0 white;
+            top: 210px;
+        }
 
-            .full-height {
-                height: 100vh;
-            }
+        #userText{
+            background:none;
+            border:none;
+            border-bottom:1px solid #aaa;
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+            color: #777777;
+            display: block;
+            font-family: 'Open Sans Condensed',sans-serif;
+            font-size: 26px;
+            margin: 0 auto 0px;
+            padding: 10px;
+            text-align: center;
+            width: 300px;
+            outline: none;
+        }
+    </style>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" type="text/css" />
 
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+    <div class="content">
+        <div class="title m-b-md" id="first">
+            Hello:)
         </div>
-    </body>
-</html>
+
+        <div class="title m-b-md" id="second">
+            This my Test Tasks
+        </div>
+    </div>
+    <div id="container">Hello:)</div>
+
+    <input type="hidden" id="userText" />
+
+@endsection
+
+@section('scripts')
+    <script href="js/lib/jquery.shuffleLetters.js"></script>
+    <script>
+        (function($){
+
+            $.fn.shuffleLetters = function(prop){
+
+                var options = $.extend({
+                    "step"		: 8,			// How many times should the letters be changed
+                    "fps"		: 25,			// Frames Per Second
+                    "text"		: "", 			// Use this text instead of the contents
+                    "callback"	: function(){}	// Run once the animation is complete
+                },prop)
+
+                return this.each(function(){
+
+                    var el = $(this),
+                        str = "";
+
+
+                    // Preventing parallel animations using a flag;
+
+                    if(el.data('animated')){
+                        return true;
+                    }
+
+                    el.data('animated',true);
+
+
+                    if(options.text) {
+                        str = options.text.split('');
+                    }
+                    else {
+                        str = el.text().split('');
+                    }
+
+                    // The types array holds the type for each character;
+                    // Letters holds the positions of non-space characters;
+
+                    var types = [],
+                        letters = [];
+
+                    // Looping through all the chars of the string
+
+                    for(var i=0;i<str.length;i++){
+
+                        var ch = str[i];
+
+                        if(ch == " "){
+                            types[i] = "space";
+                            continue;
+                        }
+                        else if(/[a-z]/.test(ch)){
+                            types[i] = "lowerLetter";
+                        }
+                        else if(/[A-Z]/.test(ch)){
+                            types[i] = "upperLetter";
+                        }
+                        else {
+                            types[i] = "symbol";
+                        }
+
+                        letters.push(i);
+                    }
+
+                    el.html("");
+
+                    // Self executing named function expression:
+
+                    (function shuffle(start){
+
+                        // This code is run options.fps times per second
+                        // and updates the contents of the page element
+
+                        var i,
+                            len = letters.length,
+                            strCopy = str.slice(0);	// Fresh copy of the string
+
+                        if(start>len){
+
+                            // The animation is complete. Updating the
+                            // flag and triggering the callback;
+
+                            el.data('animated',false);
+                            options.callback(el);
+                            return;
+                        }
+
+                        // All the work gets done here
+                        for(i=Math.max(start,0); i < len; i++){
+
+                            // The start argument and options.step limit
+                            // the characters we will be working on at once
+
+                            if( i < start+options.step){
+                                // Generate a random character at thsi position
+                                strCopy[letters[i]] = randomChar(types[letters[i]]);
+                            }
+                            else {
+                                strCopy[letters[i]] = "";
+                            }
+                        }
+
+                        el.text(strCopy.join(""));
+
+                        setTimeout(function(){
+
+                            shuffle(start+1);
+
+                        },1000/options.fps);
+
+                    })(-options.step);
+
+
+                });
+            };
+
+            function randomChar(type){
+                var pool = "";
+
+                if (type == "lowerLetter"){
+                    pool = "abcdefghijklmnopqrstuvwxyz0123456789";
+                }
+                else if (type == "upperLetter"){
+                    pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                }
+                else if (type == "symbol"){
+                    pool = ",.?/\\(^)![]{}*&^%$#'\"";
+                }
+
+                var arr = pool.split('');
+                return arr[Math.floor(Math.random()*arr.length)];
+            }
+
+        })(jQuery);
+        $(function(){
+
+            // container is the DOM element;
+            // userText is the textbox
+
+            var container = $("#container")
+            userText = $('#userText');
+
+            // Shuffle the contents of container
+            container.shuffleLetters();
+
+            // Bind events
+            userText.click(function () {
+
+                userText.val("");
+
+            }).bind('keypress',function(e){
+
+                if(e.keyCode == 13){
+
+                    // The return key was pressed
+
+                    container.shuffleLetters({
+                        "text": userText.val()
+                    });
+
+                    userText.val("");
+                }
+
+            }).hide();
+
+            // Leave a 4 second pause
+
+            setTimeout(function(){
+
+                // Shuffle the container with custom text
+                container.shuffleLetters({
+                    "text": "This my Test Tasks!"
+                });
+
+                userText.val("type anything and hit return..").fadeIn();
+
+            },4000);
+
+        });
+
+    </script>
+@endsection
